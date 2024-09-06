@@ -1,0 +1,33 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - my_network
+    volumes:
+      - mongo-data:/data/db
+
+  node:
+    build: .
+    container_name: node
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URL: mongodb://mongo:27017/Demo
+    networks:
+      - my_network
+    image:  aravindh/nodejs_mongo_hello_wordsss
+
+networks:
+  my_network:
+    external: true
+
+volumes:
+  mongo-data:
